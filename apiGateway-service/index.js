@@ -2,9 +2,12 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+const decodeJWT = require('./middlewares/jwt');
 const authProxy = require('./routes/authProxy');
 const postProxy = require('./routes/postProxy');
+const cookieParser = require('cookie-parser');
 
+app.use(cookieParser());
 // Health check
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -15,8 +18,8 @@ app.get('/health', (req, res) => {
 });
 
 // Mount proxy routes
-app.use('/auth', authProxy);
-app.use('/post', postProxy);
+app.use('/auth', decodeJWT, authProxy);
+app.use('/post', decodeJWT, postProxy);
 
 
 app.listen(PORT, () => {
