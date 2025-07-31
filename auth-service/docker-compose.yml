@@ -1,3 +1,4 @@
+# docker-compose.yml for testing the auth service with PostgreSQL before deploying.
 version: '3.8'
 services:
   postgres:

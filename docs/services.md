@@ -14,3 +14,4 @@
   - Issue JWT tokens
   - Exposes the user profile info (to keep the system interdependent and detached, the other services will have a small copy of the user info that will be updated with a future event broker)
   - Emit `UserUpdated` events to keep other services in sync (planned)
+- **Note**: Refresh tokens are NOT implemented to accelerate project development. JWT tokens will have longer expiration times for simplicity.
