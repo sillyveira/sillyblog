@@ -27,10 +27,14 @@ const login = async (req, res) => {
       return res.status(400).json({ error: 'Email e password são obrigatórios' });
     }
 
-    const result = await authService.login({ email, password }, res);
-    console.log('Auth service completed, sending response');
+    const result = await authService.login({ email, password }, res);    
+    res.cookie('token', result, { httpOnly: true, secure: false });
+
+    return res.status(200).json({
+      message: 'Login realizado com sucesso',
+      token: result
+    });
     
-    res.status(200).json(result);
   } catch (error) {
     res.status(401).json({ error: error.message });
   }

@@ -23,26 +23,16 @@ const register = async ({ email, password, name }) => {
 };
 
 // Authenticates the user by checking the email and password.
-// If the credentials are valid, it generates a JWT token and sets it as a cookie.
-const login = async ({ email, password }, res) => {
+// If the credentials are valid, it generates a JWT token and returns it.
+const login = async ({ email, password }) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) throw new Error('Credenciais inválidas');
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error('Credenciais inválidas');
 
-  const token = jwt.generateToken({ userId: user.id });
-  
-  // Localstorage isn't secure, so cookies will be used to store the JWT token.
-  // The tag 'secure' is set to false because of the local development environment.
-  res.cookie('token', token, {
-    httpOnly: true,
-    secure: false,
-    maxAge: 24 * 60 * 60 * 1000, // 24 horas
-    sameSite: 'lax'
-  });
-
-  return { message: 'Login realizado com sucesso' };
+  const token = jwt.generateToken({ id: user.id, name: user.name, email: user.email });
+  return token;
 };
 
 module.exports = { register, login };
