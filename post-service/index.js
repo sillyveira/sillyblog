@@ -2,7 +2,8 @@ const express = require('express');
 //const postRoutes = require('./src/routes/post.routes');
 const app = express();
 const PORT = process.env.PORT || 3001;
-
+const postRoutes = require('./src/routes/post.routes');
+const {extractUserFromHeaders} = require('../shared/middleware/userHeaders');
 
 app.use(express.json());
 
@@ -19,6 +20,8 @@ app.get('/health', (req, res) => {
     service: 'post-service'
   });
 });
+
+app.use('/', extractUserFromHeaders, postRoutes);
 
 
 app.listen(PORT, () => {
