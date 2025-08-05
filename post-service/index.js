@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const postRoutes = require('./src/routes/post.routes');
-const {extractUserFromHeaders} = require('../shared/middleware/userHeaders');
+const {extractUserFromHeaders} = require('./utils/userHeaders');
 
 app.use(express.json());
 
