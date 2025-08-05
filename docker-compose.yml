@@ -1,0 +1,67 @@
+services:
+  auth-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: sillyuser
+      POSTGRES_PASSWORD: sillypass
+      POSTGRES_DB: auth_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+
+  post-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: sillyuser1
+      POSTGRES_PASSWORD: sillypass1
+      POSTGRES_DB: post_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - post-db-data:/var/lib/postgresql/data
+
+  auth-service:
+    build:
+      context: ./auth-service
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./auth-service:/app
+      - /app/node_modules
+    depends_on:
+      - auth-db
+    environment:
+      - DATABASE_URL=postgresql://sillyuser:sillypass@auth-db:5432/auth_db
+    command: npm run dev
+
+  post-service:
+    build:
+      context: ./post-service
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./post-service:/app
+      - /app/node_modules
+    depends_on:
+      - post-db
+    environment:
+      - DATABASE_URL=postgresql://sillyuser1:sillypass1@post-db:5432/post_db
+    command: npm run dev
+
+  api-gateway:
+    build:
+      context: ./apiGateway-service
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./apiGateway-service:/app
+      - /app/node_modules
+    depends_on:
+      - auth-service
+      - post-service
+    command: npm run dev
+
+volumes:
+  auth-db-data:
+  post-db-data:
