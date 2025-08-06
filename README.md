@@ -1,56 +1,144 @@
-# 📰 Mini Blog – Microservices Architecture
+# 🎭 SillyBlog
 
-This project is a **microservices-based mini blog**, built using **Node.js with Express.js**, designed to simulate real-world service separation, inter-service communication, and basic API Gateway routing.
+> **A silly ideas board** - A simple blog platform built with microservices architecture & Next.JS
 
-> ⚠️ This project is currently under active development. Expect breaking changes and incomplete features.
+[![Microservices](https://img.shields.io/badge/Architecture-Microservices-green?logo=docker)](https://microservices.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green?logo=node.js)](https://nodejs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.4.5-black?logo=next.js)](https://nextjs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?logo=postgresql)](https://postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-blue?logo=docker)](https://docker.com/)
 
----
+## 📋 About the Project
 
-## 🧩 Services
+**SillyBlog** is a modern blog platform built with microservices architecture. The project demonstrates distributed development practices, inter-service communication, and horizontal scalability.
 
-### 🧠 Auth Service
-Responsible for:
-- User registration and login
-- JWT generation and verification
-- (Planned) Emitting user-related events (`UserUpdated`, etc.)
-
-### ✍️ Posts Service
-Responsible for:
-- Creating and retrieving blog posts
-- Storing post data associated with user IDs
-- (Planned) Listening to `UserUpdated` events to sync user info
-
-### 🌐 API Gateway
-Responsible for:
-- Routing external HTTP requests to internal services
-- Handling auth routes under `/auth/*`
-- Handling post routes under `/posts/*`
-- (Planned) JWT validation and request forwarding to services
-
-### 🧃 Planned Services
-- **Comments Service**: Comment system per post
-- **Event Broker**: Internal event bus for service sync
+> ⚠️ This project is currently under active development. Expect changes and incomplete features.
 
 ---
 
-## 📐 Architecture
+## 🏗️ Architecture
 
-The system follows a **modular microservices architecture**, promoting decoupling and scalability.
+### Microservices
 
-- Communication between services is initially via HTTP (through the API Gateway)
-- Event-driven communication will be added using a lightweight internal broker
-- Authentication is stateless using JWTs, issued by the Auth Service
-- Everything will be dockerized
----
+- **🎨 Client** - Next.js frontend with Ant Design and Tailwind CSS
+- **🚪 API Gateway** - Request routing and proxying 
+- **🔐 Auth Service** - Authentication and authorization service
+- **📝 Post Service** - Post and content management
 
-## 📁 Docs
+### Database
 
-You can find more technical details in the [`/docs`](./docs) folder, including:
+- **PostgreSQL 15** - Two separate instances:
+  - `auth-db` (port 5432) - Authentication data
+  - `post-db` (port 5433) - Post data
 
-- `architecture.md` – project structure and service responsibilities
-- `services.md` – description of each service
+## 🚀 Technologies
 
----
+### Frontend
+- **Next.js 15** - React framework with App Router
+- **Ant Design 5** - UI component system
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **TypeScript** - Static typing
+
+### Backend
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web framework
+- **Prisma** - Database ORM
+- **JWT** - Token-based authentication
+
+### Infrastructure
+- **Docker & Docker Compose** - Containerization
+- **PostgreSQL 15** - Relational database
+
+## 📦 Prerequisites
+
+- **Docker** >= 20.0
+- **Docker Compose** >= 2.0
+- **Node.js** >= 18.0 
+- **npm**
+
+## 🛠️ Installation and Execution
+
+### Complete Execution with Docker
+
+```bash
+# Clone the repository
+git clone https://github.com/sillyveira/sillyblog.git
+cd sillyblog
+
+# Run all services
+docker-compose up -d
+
+# Check logs
+docker-compose logs -f
+```
+
+### Service Ports
+
+- **Client (Frontend)**: `http://localhost:2999`
+- **API Gateway**: `http://localhost:8080`
+- **Auth Service**: `http://localhost:3000`
+- **Post Service**: `http://localhost:3001`
+- **Auth Database**: `localhost:5432`
+- **Post Database**: `localhost:5433`
+
+
+## 📁 Project Structure
+
+```
+sillyblog/
+├── 📱 client/                    # Next.js Frontend
+│   ├── src/app/
+│   ├── package.json
+│   └── README.md
+├── 🚪 apiGateway-service/        # API Gateway
+│   ├── routes/
+│   ├── middleware/
+│   └── package.json
+├── 🔐 auth-service/              # Authentication Service
+│   ├── src/
+│   ├── prisma/
+│   └── package.json
+├── 📝 post-service/              # Posts Service
+│   ├── src/
+│   ├── prisma/
+│   └── package.json
+├── � docs/                      # Documentation
+│   ├── architecture.md
+│   └── services.md
+├── 🐳 docker-compose.yml         # Container orchestration
+└── 📖 README.md                  # This file
+```
+
+## 🎯 Features
+
+### ✅ Implemented
+- Microservices architecture
+- Docker containerization
+- PostgreSQL database structure
+
+### 🔄 In Development
+- Web Client
+
+### 📋 Planned
+- Comment system
+- Image upload
+- Real-time notifications
+- Event-driven communication
+- Monitoring and logging
+
+## 📚 Documentation
+
+- [Architecture](./docs/architecture.md)
+- [Services](./docs/services.md)
+- [Client README](./client/README.md)
+
+## 💡 Inspiration
+
+This project was created to demonstrate my skills in:
+- Practical microservices architecture
+- Integration between different technologies
+- Development best practices
+- Containerization and orchestration
 
 ## 🚧 Status
 
