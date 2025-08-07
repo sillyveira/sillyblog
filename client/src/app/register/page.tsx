@@ -3,6 +3,7 @@
 import { Form, Input, Button, Card, Typography, Space, message } from "antd";
 import { UserOutlined, LockOutlined, SmileOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/authContext";
 
 const { Title, Text } = Typography;
 
@@ -15,32 +16,20 @@ interface RegisterFormData {
 export default function RegisterPage() {
   const router = useRouter();
   const [messageApi, contextHolder] = message.useMessage();
+  const { register } = useAuth();
   const onFinish = async (values: RegisterFormData) => {
     try {
-      const res = await fetch("http://10.0.0.200:8080/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-        credentials: "include", // importante para aceitar cookies do backend
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data?.error || "Erro ao fazer login");
-      }
-
-      messageApi.success("Login realizado com sucesso!");
-      router.push("/");
+      await register(values);
+      messageApi.success("Registro realizado com sucesso!");
+      router.push("/"); 
     } catch (err: any) {
-      messageApi.error(err.message || "Erro ao fazer login.");
+      messageApi.error(err.message || "Erro ao registrar.");
     }
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
-    messageApi.error("Erro ao fazer login. Verifique suas credenciais.");
-  };
+    messageApi.error("Erro ao registrar. Verifique os dados.");
+  }
 
   return (
     <>
