@@ -1,66 +1,70 @@
-'use client'
+"use client";
 
-import { Layout, Typography, Button, Space, Menu } from 'antd';
-import { HomeOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
+import { Layout, Typography, Button, Space, Menu } from "antd";
+import { HomeOutlined, EditOutlined, UserOutlined } from "@ant-design/icons";
 
-import type { MenuProps } from 'antd';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import type { MenuProps } from "antd";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const { Header: AntHeader } = Layout;
 const { Title, Text } = Typography;
 
 export default function Header() {
-    const router = useRouter();
-  const menuItems: MenuProps['items'] = [
+  const router = useRouter();
+  const menuItems: MenuProps["items"] = [
     {
-      key: 'home',
+      key: "home",
       icon: <HomeOutlined />,
-      label: 'Início',
-      onClick: () => router.push('/')
+      label: "Início",
+      onClick: () => router.push("/"),
     },
     {
-      key: 'posts',
+      key: "posts",
       icon: <EditOutlined />,
-      label: 'Posts',
-      onClick: () => router.push('/posts')
-    },
-    {
-      key: 'profile',
-      icon: <UserOutlined />,
-      label: 'Perfil',
-      onClick: () => router.push('/profile')
+      label: "Posts",
+      onClick: () => router.push("/posts"),
     },
   ];
 
   return (
-    <AntHeader style={{ 
-      background: '#001529',
-      padding: '0 24px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-evenly'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Title level={3} style={{ color: 'white', margin: 0, marginRight: '16px' }}>
+    <AntHeader className="bg-slate-800 px-16 flex items-center justify-between fixed top-0 left-0 right-0 z-50 w-full shadow-lg">
+      <div className="flex items-center">
+        <Title
+          level={3}
+          className="!text-white !m-0 !mr-4"
+        >
           SillyBlog
         </Title>
-        <Text style={{ color: '#8c8c8c' }}>
-          Um mural de ideias bobas
-        </Text>
+        <Text className="!text-gray-400">Um mural de ideias bobas</Text>
       </div>
-      
-        <Menu 
-          theme="dark" 
-          mode="horizontal" 
-          items={menuItems}
-          style={{ 
-            background: 'transparent',
-            border: 'none',
-            minWidth: '200px'
-          }}
-        />
-        
+
+      <div className="flex space-x-2">
+        <Button
+          type="primary"
+          icon={<HomeOutlined />}
+          onClick={() => router.push("/")}
+          className="hover:bg-blue-600 transition-colors"
+        >
+          Início
+        </Button>
+        <Button
+          type="primary"
+          icon={<EditOutlined />}
+          onClick={() => router.push("/posts")}
+          className="hover:bg-blue-600 transition-colors"
+        >
+          Posts
+        </Button>
+        <Button 
+          type="primary" 
+          icon={<UserOutlined />} 
+          onClick={() => router.push("/login")}
+          className="hover:bg-blue-600 transition-colors"
+        >
+          Login
+        </Button>
+      </div>
     </AntHeader>
   );
 }
