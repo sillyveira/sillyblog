@@ -3,6 +3,8 @@ const cookieParser = require('cookie-parser');
 const authProxy = require('./routes/authProxy');
 const postProxy = require('./routes/postProxy');
 const { addUserHeaders } = require('./middleware/jwtMiddleware');
+const cors = require('cors');
+
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -10,6 +12,10 @@ const PORT = process.env.PORT || 8080;
 // Middleware
 app.use(cookieParser()); // Parse cookies before JWT middleware
 app.use(addUserHeaders); // Add user headers from JWT
+app.use(cors({
+  origin: ['http://10.0.0.200:2999'],
+  credentials: true
+}));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
