@@ -32,7 +32,22 @@ const login = async ({ email, password }) => {
   if (!isMatch) throw new Error('Credenciais inválidas');
 
   const token = jwt.generateToken({ id: user.id, name: user.name, email: user.email });
-  return token;
+  return { ...user, token };
 };
 
-module.exports = { register, login };
+// Gets user by ID, excluding password from response
+const getUserById = async (id) => {
+  const user = await prisma.user.findUnique({ 
+    where: { id: parseInt(id) },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      createdAt: true
+    }
+  });
+  
+  return user;
+};
+
+module.exports = { register, login, getUserById };
