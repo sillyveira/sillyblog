@@ -1,6 +1,6 @@
 const extractUserFromHeaders = (req, res, next) => {
   // Check if user headers exist, if so, extract user information
-  if (req.headers['x-user-id'] && req.headers['x-user-name'] && req.headers['x-user-email']) {
+  if (req.headers['x-user-id'] || req.headers['x-user-name'] || req.headers['x-user-email']) {
     req.user = {
       id: req.headers['x-user-id'] || null,
       name: req.headers['x-user-name'] || null,
@@ -13,6 +13,9 @@ const extractUserFromHeaders = (req, res, next) => {
         delete req.user[key];
       }
     });
+
+  } else {
+    console.log('No user headers found');
   }
   
   next();
