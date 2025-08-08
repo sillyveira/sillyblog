@@ -31,6 +31,7 @@ services:
       - /app/node_modules
     depends_on:
       - auth-db
+      - rabbitmq
     environment:
       - DATABASE_URL=postgresql://sillyuser:sillypass@auth-db:5432/auth_db
     command: npm run dev
@@ -45,6 +46,7 @@ services:
       - /app/node_modules
     depends_on:
       - post-db
+      - rabbitmq
     environment:
       - DATABASE_URL=postgresql://sillyuser1:sillypass1@post-db:5432/post_db
     command: npm run dev
@@ -68,7 +70,15 @@ services:
      - "5672:5672"   
      - "15672:15672"
 
-
+  client:
+    build:
+      context: ./client
+    ports:
+      - "2999:2999"
+    environment:
+      - NODE_ENV=production
+      - PORT=2999
+      
 volumes:
   auth-db-data:
   post-db-data:
