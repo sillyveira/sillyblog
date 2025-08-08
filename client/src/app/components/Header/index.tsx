@@ -6,6 +6,7 @@ import { HomeOutlined, EditOutlined, UserOutlined, DownOutlined, LogoutOutlined,
 import type { MenuProps } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { useAuth } from "@/contexts/authContext";
 
@@ -15,6 +16,16 @@ const { Title, Text } = Typography;
 export default function Header() {
   const router = useRouter();
   const { user, logout } = useAuth();
+  const [displayName, setDisplayName] = useState(user?.name || '');
+
+  // Update display name when user context changes
+  useEffect(() => {
+    if (user) {
+      setDisplayName(user.name);
+    } else {
+      setDisplayName('');
+    }
+  }, [user, user?.name]);
 
   // Logged user menu
   const userMenuItems: MenuProps['items'] = [
@@ -91,7 +102,7 @@ export default function Header() {
               icon={<UserOutlined />}
               className="hover:bg-blue-600 transition-colors"
             >
-              {user.name} <DownOutlined />
+              {displayName} <DownOutlined />
             </Button>
           </Dropdown>
         ) : (
