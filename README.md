@@ -83,7 +83,7 @@ docker-compose logs -f
 
 ### Service Ports
 
-- **Client (Frontend)**: `http://localhost:3000`
+- **Client (Frontend)**: `http://localhost:2999`
 - **API Gateway**: `http://localhost:8080` 
 - **Auth Service**: `http://localhost:3000` (internal)
 - **Post Service**: `http://localhost:3001` (internal)
