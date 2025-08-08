@@ -42,6 +42,12 @@ export default function PostForm({ initialData, postId, mode, onSubmit }: PostFo
     try {
       setLoading(true)
       
+      // Manual validation for content since we disabled automatic validation
+      if (!contentValue || contentValue.trim().length < 10) {
+        message.error('O conteúdo deve ter pelo menos 10 caracteres')
+        return
+      }
+      
       // Ensure content is updated
       const submissionData = {
         ...values,
@@ -91,7 +97,6 @@ export default function PostForm({ initialData, postId, mode, onSubmit }: PostFo
             const newValue = e.target.value
             setContentValue(newValue)
             setPreviewContent(newValue)
-            form.setFieldValue('content', newValue)
           }}
           className="font-mono text-sm"
         />
@@ -197,14 +202,9 @@ export default function PostForm({ initialData, postId, mode, onSubmit }: PostFo
               { required: true, message: 'Por favor, insira o conteúdo do post' },
               { min: 10, message: 'O conteúdo deve ter pelo menos 10 caracteres' }
             ]}
+            validateTrigger={[]} // Disable automatic validation
           >
             <div>
-              {/* Hidden input for form validation */}
-              <Input.TextArea 
-                value={contentValue}
-                style={{ display: 'none' }}
-                onChange={() => {}} // Only for the form, no logic needed
-              />
               <Tabs 
                 activeKey={activeTab} 
                 onChange={setActiveTab}
