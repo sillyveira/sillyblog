@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 8080;
 app.use(cookieParser()); // Parse cookies before JWT middleware
 app.use(addUserHeaders); // Add user headers from JWT
 app.use(cors({
-  origin: ['http://10.0.0.200:2999'],
+  origin: ['http://10.0.0.200:2999', 'http://localhost:2999'], // Allow frontend origin
   credentials: true
 }));
 
