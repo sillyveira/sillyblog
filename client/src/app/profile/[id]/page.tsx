@@ -80,8 +80,8 @@ export default function ProfilePage() {
           type="error"
           showIcon
           action={
-            <Space direction="vertical">
-              <Button onClick={fetchProfile}>
+            <Space className='ml-4' direction="vertical">
+              <Button onClick={fetchProfile} className='w-full'>
                 Tentar novamente
               </Button>
               <Button 
