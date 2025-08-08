@@ -14,7 +14,7 @@ const extractUserFromHeaders = (req, res, next) => {
       }
     });
   }
-  
+  console.log("User extracted from headers:", req.user);
   next();
 };
 

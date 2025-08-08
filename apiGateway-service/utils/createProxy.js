@@ -3,7 +3,17 @@ module.exports = function createProxy(options) {
   return createProxyMiddleware({
     ...options,
     changeOrigin: true,
-    onProxyReq: (proxyReq, req, res) => {
+    onProxyReq: (proxyReq, req, res) => { 
+      // Forward user headers added by jwtMiddleware
+      if (req.headers['x-user-id']) {
+        proxyReq.setHeader('x-user-id', req.headers['x-user-id']);
+      }
+      if (req.headers['x-user-name']) {
+        proxyReq.setHeader('x-user-name', req.headers['x-user-name']);
+      }
+      if (req.headers['x-user-email']) {
+        proxyReq.setHeader('x-user-email', req.headers['x-user-email']);
+      }
       
       // Passing the body data to the proxy request
       if (req.body) { 

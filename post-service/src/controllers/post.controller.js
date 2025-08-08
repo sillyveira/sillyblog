@@ -16,6 +16,26 @@ const getAllPosts = async (req, res) => {
   }
 };
 
+const getPostById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    if (!id || isNaN(parseInt(id))) {
+      return res.status(400).json({ error: 'ID do post inválido' });
+    }
+
+    const post = await postService.getPostById(parseInt(id));
+    
+    if (!post) {
+      return res.status(404).json({ error: 'Post não encontrado' });
+    }
+    
+    res.json(post);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const createPost = async (req, res) => {
   try {
     const { title, content } = req.body;
@@ -23,7 +43,8 @@ const createPost = async (req, res) => {
     if (!title || !content) {
       return res.status(400).json({ error: 'Título e conteúdo são obrigatórios' });
     }
-
+    
+    
     if (!req.user) {
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
@@ -31,7 +52,6 @@ const createPost = async (req, res) => {
     const { id, name, email } = req.user; 
     const idToInt = parseInt(id);
 
-    console.log(req.user);
     const post = await postService.createPost({
       title:title,
       content:content,
@@ -49,9 +69,35 @@ const createPost = async (req, res) => {
   }
 };
 
+const updatePost = async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const { id: postId } = req.params;
+
+    if (!title || !content) {
+      return res.status(400).json({ error: 'Título e conteúdo são obrigatórios' });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
+
+    const { id: userId } = req.user;
+    const post = await postService.updatePost(parseInt(postId), parseInt(userId), { title, content });
+
+    res.json({
+      message: 'Post atualizado com sucesso',
+      post
+    });
+  } catch (error) {
+    const status = error.message === 'Post não encontrado' ? 404 : 
+                   error.message === 'Não autorizado a editar este post' ? 403 : 400;
+    res.status(status).json({ error: error.message });
+  }
+};
+
 const deletePost = async (req, res) => {
   try {
-    
     if (!req.user) {
         return res.status(401).json({ error: 'Usuário não autenticado' });
     }
@@ -65,4 +111,4 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { getAllPosts, createPost, deletePost };
+module.exports = { getAllPosts, getPostById, createPost, updatePost, deletePost };

@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const authProxy = require('./routes/authProxy');
 const postProxy = require('./routes/postProxy');
 const { addUserHeaders } = require('./middleware/jwtMiddleware');
+const { verifyToken } = require('./utils/jwt');
 const cors = require('cors');
 
 
@@ -24,6 +25,37 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     service: 'api-gateway'
   });
+});
+
+// Me endpoint - Get current user info from JWT cookie
+app.get('/me', (req, res) => {
+  try {
+    const token = req.cookies.token;
+    
+    if (!token) {
+      return res.status(401).json({ 
+        error: 'Token não encontrado. Faça login primeiro.' 
+      });
+    }
+
+    // Verify and decode the JWT token
+    const decoded = verifyToken(token);
+    
+    // Return user information
+    res.status(200).json({
+      id: decoded.id,
+      name: decoded.name,
+      email: decoded.email,
+      iat: decoded.iat,
+      exp: decoded.exp
+    });
+    
+  } catch (error) {
+    console.error('Error while verifying token:', error);
+    res.status(401).json({ 
+      error: 'Token inválido ou expirado' 
+    });
+  }
 });
 
 // Proxy routes

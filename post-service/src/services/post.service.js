@@ -26,6 +26,14 @@ const getAllPosts = async (page = 1, limit = 10) => {
   };
 };
 
+const getPostById = async (id) => {
+  const post = await prisma.post.findUnique({
+    where: { id },
+  });
+  
+  return post;
+};
+
 const createPost = async ({ title, content, id, name, email }) => {
   const post = await prisma.post.create({
     data: {
@@ -39,11 +47,25 @@ const createPost = async ({ title, content, id, name, email }) => {
   return post;
 };
 
+const updatePost = async (postId, userId, { title, content }) => {
+  const post = await prisma.post.findUnique({ where: { id: postId } });
+  if (!post) throw new Error('Post não encontrado');
+  if (post.authorId !== userId) throw new Error('Não autorizado a editar este post');
+
+  const updatedPost = await prisma.post.update({
+    where: { id: postId },
+    data: {
+      title,
+      content,
+      updatedAt: new Date()
+    },
+  });
+  
+  return updatedPost;
+};
+
 const deletePost = async (postId, userId) => {
-    console.log(postId);
-    console.log(userId);
   const post = await prisma.post.findUnique({ where: { id: parseInt(postId) } });
-  console.log(post);
   if (!post) throw new Error('Post não encontrado');
   if (post.authorId !== userId) throw new Error('Não autorizado a deletar este post');
 
@@ -51,4 +73,4 @@ const deletePost = async (postId, userId) => {
   return { message: 'Post deletado com sucesso' };
 };
 
-module.exports = { getAllPosts, createPost, deletePost };
+module.exports = { getAllPosts, getPostById, createPost, updatePost, deletePost };
