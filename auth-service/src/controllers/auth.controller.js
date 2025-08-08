@@ -75,4 +75,39 @@ const getProfile = async (req, res) => {
   }
 };
 
-module.exports = { register, login, logout, getProfile };
+const updateProfile = async (req, res) => {
+  try {
+    const { name } = req.body;
+    const userId = req.user.id;
+    
+    if (!name || name.trim() === '') {
+      return res.status(400).json({ error: 'Nome é obrigatório' });
+    }
+
+    if (name.length < 2) {
+      return res.status(400).json({ error: 'Nome deve ter pelo menos 2 caracteres' });
+    }
+
+    if (name.length > 100) {
+      return res.status(400).json({ error: 'Nome deve ter no máximo 100 caracteres' });
+    }
+
+    const result = await authService.updateUserProfile(userId, { name: name.trim() });
+    
+    if (!result || !result.user) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    // Update cookie with new token containing updated user info
+    res.cookie('token', result.token, { httpOnly: true, secure: false });
+
+    res.status(200).json({
+      message: 'Perfil atualizado com sucesso',
+      user: result.user
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { register, login, logout, getProfile, updateProfile };

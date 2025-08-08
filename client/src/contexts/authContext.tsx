@@ -27,6 +27,7 @@ interface AuthContextType {
   login: (data: UserLogin) => Promise<void>;
   register: (data: UserRegister) => Promise<void>;
   logout: () => void;
+  updateUser: (userData: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -110,9 +111,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     router.push("/login");
   };
 
+  const updateUser = (userData: Partial<User>) => {
+    setUser(prevUser => {
+      if (prevUser) {
+        const updatedUser = { ...prevUser, ...userData };
+        console.log('Auth context updated:', updatedUser);
+        return updatedUser;
+      }
+      return prevUser;
+    });
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, loading: !checkedMe, login, register, logout }}
+      value={{ user, loading: !checkedMe, login, register, logout, updateUser }}
     >
       {children}
     </AuthContext.Provider>

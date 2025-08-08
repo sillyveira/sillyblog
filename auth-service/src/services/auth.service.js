@@ -2,6 +2,7 @@ const prisma = require('../prisma/client');
 const bcrypt = require('bcryptjs');
 const jwt = require('../utils/jwt');
 
+const { getChannel } = require('../rabbit/rabbit');
 
 // Verifies the user by their email, hashes the password, and creates a new user in the database.
 // Returns the user ID, email, and name if the registration is successful.
@@ -50,4 +51,47 @@ const getUserById = async (id) => {
   return user;
 };
 
-module.exports = { register, login, getUserById };
+// Updates user profile information
+const updateUserProfile = async (id, data) => {
+  const updatedUser = await prisma.user.update({
+    where: { id: parseInt(id) },
+    data: data,
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      createdAt: true
+    }
+  });
+
+  // Generate new token with updated user information
+  const newToken = jwt.generateToken({ 
+    id: updatedUser.id, 
+    name: updatedUser.name, 
+    email: updatedUser.email 
+  });
+
+  const channel = getChannel();
+  
+  if (channel) {
+    try {
+      channel.publish('auth-events', '', Buffer.from(JSON.stringify({
+        type: 'user_updated',
+        payload: {
+          id: updatedUser.id,
+          name: updatedUser.name,
+          email: updatedUser.email
+        }
+      })));
+      console.log('✅ Message sent to RabbitMQ');
+    } catch (error) {
+      console.error('❌ Failed to send message to RabbitMQ:', error.message);
+    }
+  } else {
+    console.log('⚠️ RabbitMQ not available, skipping message publish');
+  }
+
+  return { user: updatedUser, token: newToken };
+};
+
+module.exports = { register, login, getUserById, updateUserProfile };

@@ -73,4 +73,15 @@ const deletePost = async (postId, userId) => {
   return { message: 'Post deletado com sucesso' };
 };
 
-module.exports = { getAllPosts, getPostById, createPost, updatePost, deletePost };
+// Updates author name for all posts by user ID
+const updateAuthorName = async (userId, newName) => {
+  const updatedPosts = await prisma.post.updateMany({
+    where: { authorId: userId },
+    data: { authorName: newName }
+  });
+
+  console.log(`✅ Updated ${updatedPosts.count} posts for user ${userId} with new name: ${newName}`);
+  return updatedPosts;
+};
+
+module.exports = { getAllPosts, getPostById, createPost, updatePost, deletePost, updateAuthorName };

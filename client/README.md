@@ -1,6 +1,6 @@
 # 🎭 SillyBlog Client
 
-> **Um mural de ideias bobas** - Frontend moderno construído com Next.js, Ant Design e Tailwind CSS
+> **A silly ideas board** - Modern frontend built with Next.js, Ant Design and Tailwind CSS
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.4.5-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1.0-blue?logo=react)](https://reactjs.org/)
@@ -8,53 +8,130 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.0-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue?logo=typescript)](https://typescriptlang.org/)
 
-## 📋 Sobre o Projeto
+## 📋 About the Project
 
-O **SillyBlog Client** é o frontend de uma aplicação de blog moderna construída com arquitetura de microsserviços. Esta interface permite aos usuários navegar, criar e gerenciar posts de forma intuitiva e responsiva.
+The **SillyBlog Client** is the frontend of a modern blog application built with microservices architecture. This interface allows users to navigate, create and manage posts in an intuitive and responsive way.
 
-## 🚀 Tecnologias
+## 🚀 Technologies
 
-- **[Next.js 15.4.5](https://nextjs.org/)** - Framework React com App Router
-- **[React 19.1.0](https://reactjs.org/)** - Biblioteca para construção de interfaces
-- **[Ant Design 5.26.7](https://ant.design/)** - Sistema de componentes de UI
-- **[Tailwind CSS 4.0](https://tailwindcss.com/)** - Framework de CSS utilitário
-- **[TypeScript](https://typescriptlang.org/)** - Tipagem estática para JavaScript
+- **[Next.js 15.4.5](https://nextjs.org/)** - React framework with App Router
+- **[React 19.1.0](https://reactjs.org/)** - Library for building user interfaces
+- **[Ant Design 5.26.7](https://ant.design/)** - UI component system
+- **[Tailwind CSS 4.0](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[TypeScript](https://typescriptlang.org/)** - Static typing for JavaScript
 
-## 🏗️ Arquitetura
+## 🏗️ Architecture
 
-Este cliente faz parte de um sistema de microsserviços que inclui:
+This client is part of a microservices system that includes:
 
-- **Frontend (este projeto)** - Interface do usuário
-- **API Gateway** - Roteamento e proxy de requisições
-- **Auth Service** - Serviço de autenticação
-- **Post Service** - Serviço de gerenciamento de posts
+- **Frontend (this project)** - User interface
+- **API Gateway** - Request routing and proxying
+- **Auth Service** - Authentication service
+- **Post Service** - Post management service
 
-## 📦 Pré-requisitos
+## 📦 Prerequisites
 
 - **Node.js** >= 18.0.0
 - **npm**
 
 
-## 🛠️ Instalação e Execução
+## 🛠️ Installation and Execution
 
-### Desenvolvimento Local
+### Local Development
 
 ```bash
-# Clone o repositório (se ainda não tiver feito)
+# Clone the repository (if you haven't already)
 git clone https://github.com/sillyveira/sillyblog.git
 cd sillyblog/client
 
-# Instale as dependências
+# Install dependencies
 npm install
 
-# Execute em modo de desenvolvimento
+# Run in development mode
 npm run dev
 ```
 
-A aplicação estará disponível em `http://localhost:3000`
+The application will be available at `http://localhost:2999`
 
-## 🎯 Funcionalidades
+### Running with Docker (Complete Project)
 
-- 🔄 **Autenticação** - Em desenvolvimento
-- 🔄 **Gerenciamento de Posts** - Em desenvolvimento
-- 🔄 **Perfil de Usuário** - Em desenvolvimento
+To run the complete project with all microservices:
+
+```bash
+# In the project root (outside client folder)
+cd ..
+sudo docker compose up --build
+
+# Frontend will be available at http://localhost:2999
+# API Gateway at http://localhost:8080/
+```
+
+## 📁 Project Structure
+
+```
+client/
+├── src/
+│   ├── app/                    # Pages and layouts (App Router)
+│   │   ├── components/         # Reusable components
+│   │   │   ├── Header/         # Application header
+│   │   │   ├── PostCard/       # Post display card
+│   │   │   ├── PostForm/       # Creation/editing form
+│   │   │   ├── PostSkeleton/   # Loading skeleton
+│   │   │   └── MarkdownPreview/ # Markdown viewer
+│   │   ├── login/              # Login page
+│   │   ├── register/           # Registration page
+│   │   ├── posts/              # Post-related pages
+│   │   │   ├── create/         # Create new post
+│   │   │   └── [id]/           # Individual post and editing
+│   │   ├── profile/            # Profile pages
+│   │   │   └── [id]/           # User profile
+│   │   ├── globals.css         # Global styles
+│   │   ├── layout.tsx          # Root layout
+│   │   └── page.tsx            # Homepage
+│   ├── contexts/               # React contexts
+│   │   └── authContext.tsx     # Authentication context
+│   └── utils/                  # Utilities
+│       └── api.ts              # Custom HTTP client
+├── public/                     # Static files
+├── next.config.ts              # Next.js configuration
+├── tailwind.config.ts          # Tailwind configuration
+└── tsconfig.json               # TypeScript configuration
+```
+
+## 🎯 Features
+
+- ✅ **Complete Authentication** - Login, registration and logout with JWT
+- ✅ **Post Management** - Creation, editing, viewing and deletion of posts
+- ✅ **Markdown Editor** - Editor with real-time preview and syntax highlighting
+- ✅ **User Profile** - User profile viewing and editing
+- ✅ **Pagination System** - Optimized navigation between posts
+- ✅ **Responsive Design** - Mobile-friendly adaptive interface
+- ✅ **Real-time Updates** - Automatic user data synchronization
+- ✅ **Form Validation** - Robust validation on all fields
+- ✅ **User Feedback** - Clear notifications for user actions
+
+## ✨ Key Features
+
+### 🔐 Authentication System
+- New user registration with validation
+- Secure login with HTTP-only cookies
+- Protected route authentication
+- Automatic user context updates
+
+### 📝 Post Editor
+- Markdown editor with tabs (Editor/Preview)
+- Real-time preview with custom components
+- Integrated Markdown syntax hints
+- Content and title validation
+
+### 👤 Profile Management
+- Public profile viewing
+- Self name editing with modal
+- Automatic header updates after changes
+- JWT token synchronization
+
+### 🎨 User Interface
+- Modern design with Ant Design + Tailwind CSS
+- Fixed header with intuitive navigation
+- Responsive cards and smooth animations
+- Consistent theme throughout application

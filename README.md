@@ -10,9 +10,14 @@
 
 ## 📋 About the Project
 
-**SillyBlog** is a modern blog platform built with microservices architecture. The project demonstrates distributed development practices, inter-service communication, and horizontal scalability.
+**SillyBlog** is a modern blog platform built with microservices architecture. The project demonstrates distributed development practices, inter-service communication, event-driven messaging with RabbitMQ, and horizontal scalability.
 
-> ⚠️ This project is currently under active development. Expect changes and incomplete features.
+### 🎯 Current Status: **Production Ready MVP**
+- ✅ Complete authentication system with JWT
+- ✅ Full post management (CRUD operations)  
+- ✅ Modern responsive UI with real-time updates
+- ✅ Microservices communication with RabbitMQ
+- ✅ Docker containerization and orchestration
 
 ---
 
@@ -21,15 +26,16 @@
 ### Microservices
 
 - **🎨 Client** - Next.js frontend with Ant Design and Tailwind CSS
-- **🚪 API Gateway** - Request routing and proxying 
-- **🔐 Auth Service** - Authentication and authorization service
-- **📝 Post Service** - Post and content management
+- **🚪 API Gateway** - Request routing and proxying with JWT middleware
+- **🔐 Auth Service** - Authentication, authorization and user management
+- **📝 Post Service** - Post CRUD operations and content management
+- **🐰 RabbitMQ** - Event-driven messaging between services
 
 ### Database
 
 - **PostgreSQL 15** - Two separate instances:
-  - `auth-db` (port 5432) - Authentication data
-  - `post-db` (port 5433) - Post data
+  - `auth-db` (port 5432) - User authentication and profile data
+  - `post-db` (port 5433) - Posts and content data
 
 ## 🚀 Technologies
 
@@ -46,8 +52,9 @@
 - **JWT** - Token-based authentication
 
 ### Infrastructure
-- **Docker & Docker Compose** - Containerization
+- **Docker & Docker Compose** - Containerization and orchestration
 - **PostgreSQL 15** - Relational database
+- **RabbitMQ** - Message broker for event-driven communication
 
 ## 📦 Prerequisites
 
@@ -74,10 +81,11 @@ docker-compose logs -f
 
 ### Service Ports
 
-- **Client (Frontend)**: `http://localhost:2999`
-- **API Gateway**: `http://localhost:8080`
-- **Auth Service**: `http://localhost:3000`
-- **Post Service**: `http://localhost:3001`
+- **Client (Frontend)**: `http://localhost:3000`
+- **API Gateway**: `http://localhost:8080` 
+- **Auth Service**: `http://localhost:3000` (internal)
+- **Post Service**: `http://localhost:3001` (internal)
+- **RabbitMQ Management**: `http://localhost:15672` (guest/guest)
 - **Auth Database**: `localhost:5432`
 - **Post Database**: `localhost:5433`
 
@@ -111,20 +119,47 @@ sillyblog/
 
 ## 🎯 Features
 
-### ✅ Implemented
-- Microservices architecture
-- Docker containerization
-- PostgreSQL database structure
+### ✅ Implemented Features
+
+#### 🔐 Authentication System
+- User registration and login with validation
+- JWT-based authentication with HTTP-only cookies
+- Protected routes and middleware
+- User profile management and editing
+- Automatic token refresh on profile updates
+
+#### 📝 Post Management
+- Create, read, update, delete posts
+- Markdown editor with real-time preview
+- Post pagination and navigation
+- Author information display
+- Responsive post cards
+
+#### 🎨 User Interface  
+- Modern responsive design
+- Ant Design component system
+- Tailwind CSS styling
+- Loading states and skeletons
+- Form validation and error handling
+- Real-time user feedback
+
+#### 🐰 Event-Driven Architecture
+- RabbitMQ message broker integration
+- User update events between services
+- Automatic author name synchronization
+- Fault-tolerant messaging
 
 ### 🔄 In Development
-- Web Client
+- Advanced post filtering and search
+- User avatar uploads
 
 ### 📋 Planned
-- Comment system
-- Image upload
+- Comment system on posts
 - Real-time notifications
-- Event-driven communication
-- Monitoring and logging
+- User roles and permissions
+- Post categories and tags
+- Email notifications
+- Social features (likes, shares)
 
 ## 📚 Documentation
 
@@ -140,11 +175,24 @@ This project was created to demonstrate my skills in:
 - Development best practices
 - Containerization and orchestration
 
-## 🚧 Status
+## 🚧 Development Status
 
-- ✅ Auth Service – done
-- ✅ API Gateway – done
-- ✅ Posts Service – done
-- ⏳ Client (React) - planned
-- ⏳ Comments Service – planned
-- ⏳ Event Broker – planned
+- ✅ **Auth Service** – Complete with JWT and user management
+- ✅ **API Gateway** – Complete with routing and middleware
+- ✅ **Post Service** – Complete with CRUD and event messaging
+- ✅ **Client (Next.js)** – Complete MVP with all core features
+- ✅ **RabbitMQ Integration** – Event-driven user updates
+- ✅ **Docker Environment** – Production-ready containerization
+- ⏳ **Advanced Features** – Search, categories, comments (planned)
+
+## 🎨 Screenshots & Demo
+
+The application features a modern, responsive interface built with Next.js and Ant Design:
+
+- **Homepage**: Clean post listing with pagination
+- **Post Editor**: Markdown editor with live preview
+- **User Profiles**: Profile viewing and editing capabilities  
+- **Authentication**: Secure login/register forms
+- **Responsive Design**: Mobile-first approach
+
+*Demo deployment and screenshots coming soon!*

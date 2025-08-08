@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { Card, Avatar, Typography, Spin, Alert, Button, Divider, Space, Tag } from 'antd'
+import { Card, Avatar, Typography, Spin, Alert, Button, Divider, Space, Tag, Modal, Form, Input, message } from 'antd'
 import { UserOutlined, MailOutlined, CalendarOutlined, ArrowLeftOutlined, EditOutlined } from '@ant-design/icons'
 import { api } from '@/utils/api'
 import { useAuth } from '@/contexts/authContext'
@@ -19,10 +19,12 @@ interface UserProfile {
 export default function ProfilePage() {
   const params = useParams()
   const router = useRouter()
-  const { user: currentUser } = useAuth()
+  const { user: currentUser, updateUser } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [editModalVisible, setEditModalVisible] = useState(false)
+  const [editLoading, setEditLoading] = useState(false)
 
   useEffect(() => {
     fetchProfile()
@@ -59,6 +61,47 @@ export default function ProfilePage() {
       month: 'long',
       day: 'numeric'
     })
+  }
+
+  const handleEditName = () => {
+    setEditModalVisible(true)
+  }
+
+  const handleUpdateName = async (values: { name: string }) => {
+    try {
+      setEditLoading(true)
+      
+      const response = await api(`/auth/profile/change-name`, {
+        method: 'PUT',
+        body: JSON.stringify({ name: values.name }),
+        credentials: 'include'
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erro ao atualizar nome')
+      }
+
+      const { user: updatedUser } = await response.json()
+      setProfile(updatedUser)
+      setEditModalVisible(false)
+      message.success('Nome atualizado com sucesso!')
+      
+      // Update auth context if it's the current user
+      if (currentUser && parseInt(currentUser.id) === updatedUser.id) {
+        updateUser({ name: updatedUser.name })
+      }
+      
+    } catch (error: any) {
+      console.error('Erro ao atualizar nome:', error)
+      message.error(error.message || 'Erro ao atualizar nome')
+    } finally {
+      setEditLoading(false)
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setEditModalVisible(false)
   }
 
   const isOwnProfile = currentUser && profile && parseInt(currentUser.id) === profile.id
@@ -147,9 +190,19 @@ export default function ProfilePage() {
                   {profile.name}
                 </Title>
                 {isOwnProfile && (
-                  <Tag color="blue" className="text-sm">
-                    Seu perfil
-                  </Tag>
+                  <>
+                    <Tag color="blue" className="text-sm">
+                      Seu perfil
+                    </Tag>
+                    <Button 
+                      type="text" 
+                      icon={<EditOutlined />}
+                      size="small"
+                      onClick={handleEditName}
+                      className="text-blue-500 hover:text-blue-700"
+                      title="Editar nome"
+                    />
+                  </>
                 )}
               </div>
               
@@ -171,8 +224,7 @@ export default function ProfilePage() {
                 
                 {/* Creation date */}
                 <Card 
-                  className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
-                  bodyStyle={{ padding: '20px' }}
+                  className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow p-20"
                 >
                   <div className="flex items-center mb-3">
                     <CalendarOutlined className="text-blue-500 text-xl mr-3" />
@@ -187,8 +239,7 @@ export default function ProfilePage() {
 
                 {/* User ID */}
                 <Card 
-                  className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
-                  bodyStyle={{ padding: '20px' }}
+                  className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow p-20"
                 >
                   <div className="flex items-center mb-3">
                     <UserOutlined className="text-purple-500 text-xl mr-3" />
@@ -250,6 +301,51 @@ export default function ProfilePage() {
         {/* Footer Spacer */}
         <div className="h-8"></div>
       </div>
+
+      {/* Edit Name Modal */}
+      {editModalVisible && (
+        <Modal
+          title="Editar Nome"
+          open={editModalVisible}
+          onCancel={handleCancelEdit}
+          footer={null}
+        >
+          <Form
+            layout="vertical"
+            onFinish={handleUpdateName}
+            autoComplete="off"
+            initialValues={{ name: profile?.name }}
+          >
+          <Form.Item
+            label="Nome"
+            name="name"
+            rules={[
+              { required: true, message: 'Nome é obrigatório' },
+              { min: 2, message: 'Nome deve ter pelo menos 2 caracteres' },
+              { max: 100, message: 'Nome deve ter no máximo 100 caracteres' }
+            ]}
+          >
+            <Input 
+              placeholder="Digite seu nome"
+              autoFocus
+            />
+          </Form.Item>
+          
+          <div className="flex justify-end space-x-2">
+            <Button onClick={handleCancelEdit}>
+              Cancelar
+            </Button>
+            <Button 
+              type="primary" 
+              htmlType="submit"
+              loading={editLoading}
+            >
+              Salvar
+            </Button>
+          </div>
+        </Form>
+      </Modal>
+      )}
     </div>
   )
 }

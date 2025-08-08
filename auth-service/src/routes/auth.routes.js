@@ -16,4 +16,7 @@ router.post('/logout', authController.logout);
 // GET /profile/:id - Get user profile by ID
 router.get('/profile/:id', authController.getProfile);
 
+// PUT /profile/change-name - Update user profile (name)
+router.put('/profile/change-name', extractUserFromHeaders, authController.updateProfile);
+
 module.exports = router;

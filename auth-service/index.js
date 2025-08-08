@@ -2,6 +2,18 @@ const express = require('express');
 const authRoutes = require('./src/routes/auth.routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const {connect} = require('./src/rabbit/rabbit');
+
+async function start() {
+  try {
+    await connect();
+  } catch (error) {
+    console.error('⚠️ Failed to connect to RabbitMQ:', error.message);
+    console.log('🔄 Service will continue without RabbitMQ features');
+  }
+}
+
+start();
 
 // Middleware
 app.use(express.json());

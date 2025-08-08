@@ -62,6 +62,13 @@ services:
       - post-service
     command: npm run dev
 
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+     - "5672:5672"   
+     - "15672:15672"
+
+
 volumes:
   auth-db-data:
   post-db-data:
