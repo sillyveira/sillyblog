@@ -23,6 +23,8 @@
 
 ## 🏗️ Architecture
 
+![SillyBlog Architecture](./docs/architectureImg.png)
+
 ### Microservices
 
 - **🎨 Client** - Next.js frontend with Ant Design and Tailwind CSS
