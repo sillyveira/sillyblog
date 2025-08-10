@@ -75,10 +75,9 @@ git clone https://github.com/sillyveira/sillyblog.git
 cd sillyblog
 
 # Run all services
-docker-compose up -d
+docker compose up
 
-# Check logs
-docker-compose logs -f
+# Access the application at http://localhost:2999
 ```
 
 ### Service Ports
@@ -186,15 +185,3 @@ This project was created to demonstrate my skills in:
 - ✅ **RabbitMQ Integration** – Event-driven user updates
 - ✅ **Docker Environment** – Production-ready containerization
 - ⏳ **Advanced Features** – Search, categories, comments (planned)
-
-## 🎨 Screenshots & Demo
-
-The application features a modern, responsive interface built with Next.js and Ant Design:
-
-- **Homepage**: Clean post listing with pagination
-- **Post Editor**: Markdown editor with live preview
-- **User Profiles**: Profile viewing and editing capabilities  
-- **Authentication**: Secure login/register forms
-- **Responsive Design**: Mobile-first approach
-
-*Demo deployment and screenshots coming soon!*
