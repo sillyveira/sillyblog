@@ -9,6 +9,11 @@ services:
       - "5432:5432"
     volumes:
       - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sillyuser -d auth_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   post-db:
     image: postgres:15
@@ -20,6 +25,11 @@ services:
       - "5433:5432"
     volumes:
       - post-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sillyuser1 -d post_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   auth-service:
     build:
@@ -30,11 +40,13 @@ services:
       - ./auth-service:/app
       - /app/node_modules
     depends_on:
-      - auth-db
-      - rabbitmq
+      auth-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     environment:
       - DATABASE_URL=postgresql://sillyuser:sillypass@auth-db:5432/auth_db
-    command: npm run dev
+    command: sh -c "npx prisma migrate deploy && npm run dev"
 
   post-service:
     build:
@@ -45,11 +57,13 @@ services:
       - ./post-service:/app
       - /app/node_modules
     depends_on:
-      - post-db
-      - rabbitmq
+      post-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     environment:
       - DATABASE_URL=postgresql://sillyuser1:sillypass1@post-db:5432/post_db
-    command: npm run dev
+    command: sh -c "npx prisma migrate deploy && npm run dev"
 
   api-gateway:
     build:
