@@ -34,38 +34,6 @@ This client is part of a microservices system that includes:
 - **Node.js** >= 18.0.0
 - **npm**
 
-
-## 🛠️ Installation and Execution
-
-### Local Development
-
-```bash
-# Clone the repository (if you haven't already)
-git clone https://github.com/sillyveira/sillyblog.git
-cd sillyblog/client
-
-# Install dependencies
-npm install
-
-# Run in development mode
-npm run dev
-```
-
-The application will be available at `http://localhost:2999`
-
-### Running with Docker (Complete Project)
-
-To run the complete project with all microservices:
-
-```bash
-# In the project root (outside client folder)
-cd ..
-sudo docker compose up --build
-
-# Frontend will be available at http://localhost:2999
-# API Gateway at http://localhost:8080/
-```
-
 ## 📁 Project Structure
 
 ```
@@ -105,7 +73,6 @@ client/
 - ✅ **Markdown Editor** - Editor with real-time preview and syntax highlighting
 - ✅ **User Profile** - User profile viewing and editing
 - ✅ **Pagination System** - Optimized navigation between posts
-- ✅ **Responsive Design** - Mobile-friendly adaptive interface
 - ✅ **Real-time Updates** - Automatic user data synchronization
 - ✅ **Form Validation** - Robust validation on all fields
 - ✅ **User Feedback** - Clear notifications for user actions
@@ -126,12 +93,10 @@ client/
 
 ### 👤 Profile Management
 - Public profile viewing
-- Self name editing with modal
-- Automatic header updates after changes
+- Profile edit
 - JWT token synchronization
 
 ### 🎨 User Interface
 - Modern design with Ant Design + Tailwind CSS
 - Fixed header with intuitive navigation
-- Responsive cards and smooth animations
 - Consistent theme throughout application
